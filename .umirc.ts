@@ -3,25 +3,23 @@
  * @LastEditors  : Always
  * @email: 740905172@qq.com
  * @Date: 2019-12-30 17:01:58
- * @LastEditTime : 2019-12-31 11:58:53
+ * @LastEditTime : 2019-12-31 17:40:04
  * @FilePath: /weChatSalesSystem/.umirc.ts
  */
 
 import { IConfig } from 'umi-types';
-import routes from './src/routes';
 
 // ref: https://umijs.org/config/
 const config: IConfig = {
   history: 'hash',
   treeShaking: true,
-  /* routes: [
+  routes: [
     {
       path: '/login',
       component: './Login',
       title: '登录',
     },
-  ], */
-  routes,
+  ],
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     [
