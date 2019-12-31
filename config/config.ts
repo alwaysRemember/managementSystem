@@ -2,12 +2,13 @@
  * @Author: Always
  * @LastEditors  : Always
  * @email: 740905172@qq.com
- * @Date: 2019-12-30 17:01:58
- * @LastEditTime : 2019-12-31 17:40:04
- * @FilePath: /weChatSalesSystem/.umirc.ts
+ * @Date: 2019-12-31 19:10:53
+ * @LastEditTime : 2019-12-31 19:23:18
+ * @FilePath: /managementSystem/config/index.ts
  */
 
 import { IConfig } from 'umi-types';
+import routes from "./routes";
 
 // ref: https://umijs.org/config/
 const config: IConfig = {
