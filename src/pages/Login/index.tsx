@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Icon, Button } from 'antd';
-import {login} from "../../api";
+import { login } from '../../api';
 
 import styles from './index.less';
 const Login = () => {
@@ -22,9 +22,9 @@ const Login = () => {
   const btnClick = () => {
     setBtnLoading(true);
     setInputDisabled(true);
-    login({password,userName}).then((res: any)=>{
-      // TODO 进行登录后操作      
-    })
+    login({ password, userName }).then((res: any) => {
+      // TODO 进行登录后操作
+    });
   };
 
   return (

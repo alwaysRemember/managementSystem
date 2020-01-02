@@ -1,0 +1,100 @@
+@height: 64px;
+@iconColor: #3c85f7;
+.headerWrapper {
+  box-sizing: border-box;
+  padding: 6px 30px;
+  position: fixed;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: @height;
+  border-bottom: 1px solid #e5e5e5;
+  background: #fff;
+  .logo {
+    width: 130px;
+  }
+  .workspace {
+    display: flex;
+    align-items: center;
+    .prompt {
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      font-size: 22px;
+      border-radius: 50%;
+      transition: all 0.2s linear;
+      cursor: pointer;
+      &:hover {
+        background: #e5e5e5;
+      }
+    }
+    .userExplain {
+      display: flex;
+      align-items: center;
+      margin-left: 20px;
+      cursor: pointer;
+      &:hover {
+        i {
+          &:last-child {
+            transform: rotate(-180deg);
+          }
+        }
+        .userInfoWrapper {
+          opacity: 1;
+          right: 20px;
+        }
+      }
+      i {
+        color: @iconColor;
+        transition: all 0.2s linear;
+        &:first-child {
+          font-size: 24px;
+        }
+      }
+      .userName {
+        color: @iconColor;
+        margin: 0 10px 0;
+      }
+      .userInfoWrapper {
+        padding: 20px;
+        overflow: hidden;
+        position: absolute;
+        right: -200px;
+        top: @height;
+        background: #fff;
+        border-radius: 4px;
+        opacity: 0;
+        transition: all 0.2s linear;
+        .userInfoContainer {
+          display: flex;
+          align-items: center;
+          border-bottom: 1px solid #e5e5e5;
+          & > i {
+            font-size: 34px;
+            margin-right: 10px;
+            color: @iconColor;
+          }
+          & > ul {
+            position: relative;
+            margin-bottom: 0;
+            li {
+              line-height: 30px;
+            }
+          }
+        }
+        :global {
+          .ant-btn {
+            display: block;
+            width: 100px;
+            height: 40px;
+            line-height: 40px;
+            margin: 20px auto 0;
+          }
+        }
+      }
+    }
+  }
+}

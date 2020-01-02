@@ -3,7 +3,7 @@
  * @LastEditors  : Always
  * @email: 740905172@qq.com
  * @Date: 2019-12-31 19:10:53
- * @LastEditTime : 2019-12-31 19:23:18
+ * @LastEditTime : 2020-01-02 11:18:53
  * @FilePath: /managementSystem/config/index.ts
  */
 
@@ -14,13 +14,7 @@ import routes from "./routes";
 const config: IConfig = {
   history: 'hash',
   treeShaking: true,
-  routes: [
-    {
-      path: '/login',
-      component: './Login',
-      title: '登录',
-    },
-  ],
+  routes,
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     [
