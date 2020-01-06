@@ -32,19 +32,23 @@
       }
     }
     .userExplain {
+      overflow: hidden;
       display: flex;
       align-items: center;
+      height: 64px;
       margin-left: 20px;
       cursor: pointer;
       &:hover {
+        height: auto;
         i {
           &:last-child {
             transform: rotate(-180deg);
           }
         }
-        .userInfoWrapper {
+        & ~ .userInfoWrapper {
           opacity: 1;
-          right: 20px;
+          padding: 20px;
+          height: auto;
         }
       }
       i {
@@ -58,41 +62,46 @@
         color: @iconColor;
         margin: 0 10px 0;
       }
-      .userInfoWrapper {
+    }
+    .userInfoWrapper {
+      padding: 0 20px;
+      overflow: hidden;
+      position: absolute;
+      top: @height;
+      height: 1px;
+      background: #fff;
+      border-radius: 4px;
+      opacity: 0;
+      transition: all .2s linear;
+      &:hover {
+        opacity: 1;
         padding: 20px;
-        overflow: hidden;
-        position: absolute;
-        right: -200px;
-        top: @height;
-        background: #fff;
-        border-radius: 4px;
-        opacity: 0;
-        transition: all 0.2s linear;
-        .userInfoContainer {
-          display: flex;
-          align-items: center;
-          border-bottom: 1px solid #e5e5e5;
-          & > i {
-            font-size: 34px;
-            margin-right: 10px;
-            color: @iconColor;
-          }
-          & > ul {
-            position: relative;
-            margin-bottom: 0;
-            li {
-              line-height: 30px;
-            }
+        height: auto;
+      }
+      .userInfoContainer {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #e5e5e5;
+        & > i {
+          font-size: 34px;
+          margin-right: 10px;
+          color: @iconColor;
+        }
+        & > ul {
+          position: relative;
+          margin-bottom: 0;
+          li {
+            line-height: 30px;
           }
         }
-        :global {
-          .ant-btn {
-            display: block;
-            width: 100px;
-            height: 40px;
-            line-height: 40px;
-            margin: 20px auto 0;
-          }
+      }
+      :global {
+        .ant-btn {
+          display: block;
+          width: 100px;
+          height: 40px;
+          line-height: 40px;
+          margin: 20px auto 0;
         }
       }
     }

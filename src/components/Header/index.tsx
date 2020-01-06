@@ -10,7 +10,6 @@ interface HeaderComInterFace {
 }
 
 const HeaderCom = ({ badgeCount }: HeaderComInterFace) => {
-
   return (
     <Header className={styles.headerWrapper}>
       <img src={logo} alt="" className={styles.logo} />
@@ -22,7 +21,8 @@ const HeaderCom = ({ badgeCount }: HeaderComInterFace) => {
           <Icon type="smile" theme="filled" />
           <p className={styles.userName}>15901749275</p>
           <Icon type="caret-down" theme="filled" />
-          <div className={styles.userInfoWrapper}>
+        </div>
+        <div className={styles.userInfoWrapper}>
             <div className={styles.userInfoContainer}>
               <Icon type="smile" theme="filled" />
               <ul>
@@ -41,7 +41,6 @@ const HeaderCom = ({ badgeCount }: HeaderComInterFace) => {
               退出
             </Button>
           </div>
-        </div>
       </div>
     </Header>
   );
