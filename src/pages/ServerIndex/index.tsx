@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef, RefObject } from 'react';
 import echarts, { EChartOption } from 'echarts';
-import { updateUser } from '@/actions';
 import ModalTitle from '../../components/ModalTitle';
-import { IData, IOperation, IOperationItemTagList, IQuickEntry } from './interface';
+import TSpin from '../../components/TSpin';
+import { IData, IOperation, IOperationItemTagList, IQuickEntry, IContactUs } from './interface';
 
 import styles from './index.less';
+import { getServerIndexData } from '@/api';
 
 /**
  * 运营概况列表项
@@ -56,124 +57,16 @@ const ServerIndex = (props: any) => {
   const transformationChart = useRef<HTMLDivElement>(null);
 
   const [data, setData] = useState<IData>({
-    operationList: [
-      {
-        icon: 'icon-huabanfuben',
-        color: '#ed6a68',
-        list: [
-          {
-            title: '代发货订单',
-            num: 0,
-          },
-          {
-            title: '售后订单',
-            num: 0,
-          },
-          {
-            title: '本月成交订单',
-            num: 0,
-            msg: '上月：0',
-          },
-        ],
-      },
-      {
-        icon: 'icon-tongji',
-        color: '#ed6a68',
-        list: [
-          {
-            title: '今日营业额',
-            num: 0,
-            msg: '昨日：0',
-          },
-          {
-            title: '今日支付订单',
-            num: 0,
-            msg: '昨日：0',
-          },
-          {
-            title: '支付人数',
-            num: 0,
-            msg: '昨日：0',
-          },
-        ],
-      },
-      {
-        icon: 'icon-yonghufangkeshu',
-        color: '#5089f6',
-        list: [
-          {
-            title: '新增分销商',
-            num: 0,
-            msg: '昨日：0',
-          },
-          {
-            title: '待审核分销商',
-            num: 0,
-          },
-          {
-            title: '总分销商',
-            num: 0,
-          },
-        ],
-      },
-      {
-        icon: 'icon-qianbao',
-        color: '#5089f6',
-        list: [
-          {
-            title: '待处理会员提现',
-            num: 0,
-          },
-          {
-            title: '待处理佣金提现',
-            num: 0,
-          },
-          {
-            title: '本月提现佣金',
-            num: 0,
-            msg: '上月：0',
-          },
-        ],
-      },
-      {
-        icon: 'icon-huiyuan',
-        color: '#61b174',
-        list: [
-          {
-            title: '新增会员',
-            num: 0,
-            msg: '昨日：0',
-          },
-          {
-            title: '今日活跃用户',
-            num: 0,
-            msg: '昨日：0',
-          },
-          {
-            title: '总会员数',
-            num: 0,
-          },
-        ],
-      },
-      {
-        icon: 'icon-shangpin',
-        color: '#61b174',
-        list: [
-          {
-            title: '出售中商品',
-            num: 0,
-          },
-          {
-            title: '仓库中商品',
-            num: 0,
-          },
-          {
-            title: '库存预警',
-            num: 0,
-          },
-        ],
-      },
-    ],
+    operationList: [],
+    lineEchart: {
+      itemList: [],
+      dateList: [],
+      dataList: [],
+    },
+    transformationEchart: {
+      itemList: [],
+      dataList: [],
+    },
   });
 
   // 快速入口
@@ -204,70 +97,125 @@ const ServerIndex = (props: any) => {
     },
   ]);
 
-  useEffect(() => {
-    const transformationOption: EChartOption = {
-      tooltip: {
-        trigger: 'item',
-        formatter: '{a} <br/>{b} : {c}%',
-      },
-      toolbox: {
-        feature: {
-          dataView: { readOnly: false },
-          restore: {},
-          saveAsImage: {},
-        },
-      },
-      legend: {
-        data: ['访客人数', '下单买家数', '支付买家数'],
-      },
+  // 联系我们
+  const [contactUs] = useState<Array<IContactUs>>([
+    {
+      title: '电话客服',
+      subTitle: '400-123-1234',
+      icon: 'icon-dianhua',
+      color: '#5089f6',
+    },
+    {
+      title: '邮箱联系',
+      subTitle: '740905172@qq.com',
+      icon: 'icon-youxiang',
+      color: '#61b174',
+    },
+  ]);
 
-      series: [
-        {
-          name: '转化图',
-          type: 'funnel',
-          left: '0',
-          top: 40,
-          bottom: 0,
-          width: '100%',
-          min: 0,
-          max: 100,
-          minSize: '0%',
-          maxSize: '100%',
-          sort: 'descending',
-          gap: 2,
-          label: {
-            show: true,
-            position: 'top',
-          },
-          labelLine: {
-            length: 10,
-            lineStyle: {
-              width: 1,
-              type: 'solid',
-            },
-          },
-          itemStyle: {
-            borderColor: '#fff',
-            borderWidth: 1,
-          },
-          emphasis: {
-            label: {
-              fontSize: 20,
-            },
-          },
-          data: [
-            { value: 60, name: '访客人数' },
-            { value: 40, name: '下单买家数' },
-            { value: 20, name: '支付买家数' },
-          ],
-        },
-      ],
-    };
+  /* 图表处理 */
+  useEffect(() => {
+    const { lineEchart, transformationEchart } = data;
+
     if (transformationChart.current) {
+      const { dataList, itemList } = transformationEchart;
+      // 转化情况图表数据
+      const transformationOption: EChartOption = {
+        tooltip: {
+          trigger: 'item',
+        },
+        legend: {
+          data: itemList,
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {},
+          },
+        },
+        series: [
+          {
+            name: '转化图',
+            type: 'funnel',
+            left: '0',
+            top: 40,
+            bottom: 0,
+            width: '100%',
+            min: 0,
+            max: 100,
+            label: {
+              show: true,
+              position: 'top',
+            },
+            data: (() => dataList.map(({ value, label }) => ({ value, name: label })))(),
+          },
+        ],
+      };
+
       const transformation = echarts.init(transformationChart.current);
       transformation.setOption(transformationOption);
     }
+
+    if (lineChart.current) {
+      const { dataList, dateList, itemList } = lineEchart;
+      // 订单情况图表数据
+      const lineOption: EChartOption = {
+        title: {
+          subtext: '近七日订单走势',
+          subtextStyle: {
+            lineHeight: 30,
+          },
+        },
+        tooltip: {
+          trigger: 'axis',
+        },
+        legend: {
+          data: itemList,
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true,
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {},
+          },
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: dateList,
+          axisLabel: {
+            interval: 0,
+            rotate: 40,
+          },
+        },
+        yAxis: {
+          type: 'value',
+        },
+        series: (() =>
+          dataList.map(item => ({
+            name: item.label,
+            type: 'line',
+            stack: '总量',
+            data: item.value,
+          })))(),
+      };
+      const line = echarts.init(lineChart.current);
+      line.setOption(lineOption);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    getData();
   }, []);
+
+  const getData = () => {
+    getServerIndexData().then((res: IData) => {
+      setData(res);
+    });
+  };
 
   const { operationList } = data;
 
@@ -278,11 +226,13 @@ const ServerIndex = (props: any) => {
         {/* 运营概况 */}
         <div className={styles.serverOperationalCon}>
           <ModalTitle title="运营概况" />
-          <div className={styles.serverOperationalList}>
-            {operationList.map((item: IOperation, index: number) => (
-              <OperationListItem data={item} key={index} />
-            ))}
-          </div>
+          <TSpin isLoading={!Boolean(data.operationList.length)}>
+            <div className={styles.serverOperationalList}>
+              {operationList.map((item: IOperation, index: number) => (
+                <OperationListItem data={item} key={index} />
+              ))}
+            </div>
+          </TSpin>
         </div>
 
         {/* 快捷入口 */}
@@ -299,17 +249,34 @@ const ServerIndex = (props: any) => {
         <div className={styles.orderOverview}>
           <div className={styles.orderLineChart}>
             <ModalTitle title="订单概况" />
-            <div className={styles.lineChart} ref={lineChart} />
+            <TSpin isLoading={!Boolean(data.operationList.length)}>
+              <div className={styles.lineChart} ref={lineChart} />
+            </TSpin>
           </div>
           <div className={styles.transformationOverview}>
             <ModalTitle title="转化概况" />
-            <div className={styles.transformationChart} ref={transformationChart} />
+            <TSpin isLoading={!Boolean(data.operationList.length)}>
+              <div className={styles.transformationChart} ref={transformationChart} />
+            </TSpin>
           </div>
         </div>
       </div>
 
       {/* 右侧公告 */}
-      <div className={styles.serverRightAside} />
+      <div className={styles.serverRightAside}>
+        {/* 联系我们 */}
+        <div className={styles.contactUs}>
+          {contactUs.map((item: IContactUs, index: number) => (
+            <div className={styles.contactUsItem} key={index}>
+              <i className={`iconfont ${item.icon}`} />
+              <div className={styles.contactUsItemInfo}>
+                <h1 className={styles.contactUsItemTitle}>{item.title}</h1>
+                <p className={styles.contactUsItemSubTitle}>{item.subTitle}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

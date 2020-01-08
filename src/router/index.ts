@@ -1,4 +1,4 @@
-import { Router } from '@/interface/Router';
+import { IRouter } from '@/interface/Router';
 
 /*
  * @Author: Always
@@ -9,7 +9,7 @@ import { Router } from '@/interface/Router';
  * @FilePath: /managementSystem/src/router/index.ts
  */
 
-const routerList: Array<Router> = [
+const routerList: Array<IRouter> = [
   {
     path: '/server',
     title: '主页',

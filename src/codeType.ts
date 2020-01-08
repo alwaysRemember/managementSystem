@@ -6,10 +6,10 @@
  * @LastEditTime : 2019-12-31 17:28:02
  * @FilePath: /managementSystem/src/codeType.ts
  */
-import { ResponseCode } from './interface/Http';
+import { TResponseCode } from './interface/Http';
 import { HttpResponseCodeEnums } from './enums/HttpResponseCodeEnums';
 
-export const codeType = (code: ResponseCode, message: string): Promise<any> => {
+export const codeType = (code: TResponseCode, message: string): Promise<any> => {
   return new Promise((res,rej)=>{
    
     if(code === HttpResponseCodeEnums.ALERT){

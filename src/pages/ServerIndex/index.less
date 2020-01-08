@@ -1,5 +1,8 @@
 @pd: 20px;
 @mr: 20px;
+.br(@br) {
+  border-radius: @br;
+}
 .serverIndexWrapper {
   display: flex;
   .serverLeftContainer {
@@ -9,7 +12,7 @@
       padding: @pd;
       min-height: 437px;
       background: #fff;
-      border-radius: 6px;
+      .br(6px);
       .serverOperationalList {
         display: flex;
         justify-content: space-between;
@@ -22,7 +25,7 @@
           width: 49%;
           height: 100px;
           background: #f6f8fe;
-          border-radius: 6px;
+          .br(6px);
           margin-top: @mr;
           .iconWrapper {
             position: relative;
@@ -79,7 +82,7 @@
       padding: @pd;
       margin-top: @mr;
       background: #fff;
-      border-radius: 7px;
+      .br(6px);
       .serverQuickList {
         display: flex;
         flex-wrap: wrap;
@@ -124,23 +127,70 @@
       justify-content: space-between;
       background: #fff;
       margin-top: @mr;
-      border-radius: 7px;
-      & > div {
+      .br(6px);
+      .orderLineChart,
+      .transformationOverview {
         width: 48%;
-      }
-      .orderLineChart,.transformationOverview{
-        &>div{
-          width: 100%;
-          height: 300px;
+        :global {
+          .ant-spin-nested-loading {
+            .ant-spin-container {
+              & > div {
+                &:first-child {
+                  height: 300px;
+                }
+              }
+            }
+          }
         }
       }
     }
   }
 
   .serverRightAside {
-    padding: @pd;
     box-sizing: border-box;
     width: 280px;
     margin-left: @mr;
+    .contactUs {
+      box-sizing: border-box;
+      padding: @pd;
+      background: #fff;
+      .br(6px);
+      .contactUsItem {
+        display: flex;
+        height: 60px;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+        &:last-child {
+          border: none;
+        }
+        i {
+          font-size: 30px;
+          font-weight: bold;
+        }
+        .contactUsItemInfo {
+          flex: 1;
+          margin-left: 10px;
+          & > .contactUsItemSubTitle,
+          & > .contactUsItemTitle {
+            color: #333;
+          }
+          .contactUsItemTitle {
+            font-size: 14px;
+            margin: 0;
+            margin-bottom: 4px;
+          }
+          .contactUsItemSubTitle {
+            font-size: 12px;
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+    .noticeWrapper {
+      box-sizing: border-box;
+      padding: @pd;
+      margin-top: @mr;
+      background: #fff;
+    }
   }
 }

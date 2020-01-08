@@ -6,8 +6,8 @@
  * @LastEditTime : 2020-01-02 15:08:25
  * @FilePath: /managementSystem/src/reducers/user.ts
  */
-import { UserInfo } from '@/interface/User';
-import { ReduxAction } from '@/interface/Redux';
+import { IUserInfo } from '@/interface/User';
+import { IReduxAction } from '@/interface/Redux';
 import { UPDATA_USERINFO } from '@/constants';
 
 /**
@@ -16,9 +16,9 @@ import { UPDATA_USERINFO } from '@/constants';
  * @param action
  */
 export const userInfo = (
-  state: UserInfo | null = null,
-  action: ReduxAction<UserInfo>,
-): UserInfo | null => {
+  state: IUserInfo | null = null,
+  action: IReduxAction<IUserInfo>,
+): IUserInfo | null => {
   switch (action.type) {
     case UPDATA_USERINFO:
       return action.data;

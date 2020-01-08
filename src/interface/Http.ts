@@ -6,27 +6,23 @@ import { HttpResponseCodeEnums } from '@/enums/HttpResponseCodeEnums';
  * @LastEditors  : Always
  * @email: 740905172@qq.com
  * @Date: 2019-12-31 16:57:23
- * @LastEditTime : 2019-12-31 17:49:00
+ * @LastEditTime : 2020-01-08 17:54:42
  * @FilePath: /managementSystem/src/interface/Http.ts
  */
-export interface Http {
+export interface IHttp {
   type?: Method;
   url: string;
   params?: object;
   contentType?: null | 'json';
 }
 
-export interface HttpResponseData {
+export interface IHttpResponseData<T> {
   code: number;
-  data: any;
+  data: T;
   message: string;
 }
 
-export interface HttpRequestData {
-  [key: string]: any;
-}
-
-export type ResponseCode =
+export type TResponseCode =
   | HttpResponseCodeEnums.OK
   | HttpResponseCodeEnums.ALERT
   | HttpResponseCodeEnums.NO_LOGIN;

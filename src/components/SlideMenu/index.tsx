@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Menu, Icon } from 'antd';
 import { IRoute } from 'umi-types';
 import menuList from '../../router';
-import { Router } from '@/interface/Router';
+import { IRouter } from '@/interface/Router';
 import router from 'umi/router';
 import styles from './index.less';
 const { SubMenu } = Menu;
@@ -11,7 +11,7 @@ const { SubMenu } = Menu;
  * 菜单项
  * @param data
  */
-const MenuItem = (data: Router) => {
+const MenuItem = (data: IRouter) => {
   if (data.children) {
     return SubMenuItem(data);
   } else {
