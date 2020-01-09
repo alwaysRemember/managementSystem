@@ -6,6 +6,7 @@ import { IData, IOperation, IOperationItemTagList, IQuickEntry, IContactUs } fro
 
 import styles from './index.less';
 import { getServerIndexData } from '@/api';
+import { TCancel, IResponse } from '@/interface/Http';
 
 /**
  * 运营概况列表项
@@ -209,12 +210,12 @@ const ServerIndex = (props: any) => {
 
   useEffect(() => {
     getData();
+    return () => window.cancelRequestFn && window.cancelRequestFn();
   }, []);
 
-  const getData = () => {
-    getServerIndexData().then((res: IData) => {
-      setData(res);
-    });
+  const getData = async () => {
+    const data = await getServerIndexData();
+    setData(data);
   };
 
   const { operationList } = data;

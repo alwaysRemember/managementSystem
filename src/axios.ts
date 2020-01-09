@@ -3,13 +3,13 @@
  * @LastEditors  : Always
  * @email: 740905172@qq.com
  * @Date: 2019-12-31 16:51:57
- * @LastEditTime : 2020-01-08 18:22:30
+ * @LastEditTime : 2020-01-09 17:20:48
  * @FilePath: /managementSystem/src/axios.ts
  */
 /* eslint-disable */
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, CancelTokenStatic } from 'axios';
 import Qs from 'qs';
-import { IHttp, IHttpResponseData } from './interface/Http';
+import { IHttp, IHttpResponseData, IResponse } from './interface/Http';
 import { codeType } from './codeType';
 
 // 设置全局axios默认值
@@ -25,6 +25,8 @@ export default function http<T>({
   const contentTypeUse =
     contentType === 'json' ? 'application/json' : 'application/x-www-form-urlencoded';
   const paramsUse = contentType === 'json' ? params : Qs.stringify(params);
+
+  const CancelToken: CancelTokenStatic = axios.CancelToken; // 创建token
 
   const requestParams = {
     method: type,
@@ -46,17 +48,20 @@ export default function http<T>({
       Reflect.deleteProperty(requestParams, key);
     }
   }
-  return new Promise((resolve, reject) => {
-    axios(requestParams)
+  return new Promise<T>((resolve, reject) => {
+    axios({
+      ...requestParams,
+      cancelToken: new CancelToken(c => {
+        window.cancelRequestFn = c;
+      }),
+    })
       .then((res: AxiosResponse<IHttpResponseData<T>>) => {
         const { code, message, data } = res.data;
+        // 数据过滤
         codeType(code, message)
           .then(() => resolve(data))
           .catch(() => reject(code));
       })
-      .catch(err => {
-        codeType(-1, 'server connection timed out!');
-        reject(err);
-      });
+      .catch(() => codeType(-1, 'server connection timed out!'));
   });
 }
