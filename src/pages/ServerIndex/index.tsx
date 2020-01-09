@@ -6,7 +6,6 @@ import { IData, IOperation, IOperationItemTagList, IQuickEntry, IContactUs } fro
 
 import styles from './index.less';
 import { getServerIndexData } from '@/api';
-import { TCancel, IResponse } from '@/interface/Http';
 
 /**
  * 运营概况列表项

@@ -1,0 +1,36 @@
+.productsListWrapper {
+  background: #fff;
+  border-radius: 20px;
+  .operationWrapper {
+    box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    width: 70%;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    border-radius: 20px;
+    .operationItem {
+      width: 40%;
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+      .operationItemLabel {
+        font-size: 12px;
+        color: #333;
+        margin-right: 20px;
+      }
+      .operationItemVal {
+        flex: 1;
+        :global {
+          .ant-select-dropdown {
+            top: 32px !important;
+          }
+          .ant-select {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}

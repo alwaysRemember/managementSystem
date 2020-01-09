@@ -3,13 +3,13 @@
  * @LastEditors  : Always
  * @email: 740905172@qq.com
  * @Date: 2019-12-31 16:51:57
- * @LastEditTime : 2020-01-09 17:20:48
+ * @LastEditTime : 2020-01-09 17:26:10
  * @FilePath: /managementSystem/src/axios.ts
  */
 /* eslint-disable */
 import axios, { AxiosResponse, CancelTokenStatic } from 'axios';
 import Qs from 'qs';
-import { IHttp, IHttpResponseData, IResponse } from './interface/Http';
+import { IHttp, IHttpResponseData } from './interface/Http';
 import { codeType } from './codeType';
 
 // 设置全局axios默认值
