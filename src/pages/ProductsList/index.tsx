@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 import OperationItem from '@/components/OperationItem';
 import styles from './index.less';
@@ -7,7 +7,7 @@ import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 
 const ProductsList = (props: any) => {
   const [productName, setProductName] = useState<string>('');
-  const [selectVal, setSelectVal] = useState<string>('');
+  const [selectVal, setSelectVal] = useState('');
   const [checkBoxList, setCheckBoxList] = useState<Array<CheckboxValueType>>([]);
 
   /**
@@ -26,7 +26,7 @@ const ProductsList = (props: any) => {
       type: 'input',
       value: productName,
       placeholder: '请输入商品名称',
-      inputChange: (e: any) => setProductName(e.target.name),
+      inputChange: (e: any) => setProductName(e.target.value),
     },
     {
       label: '商品标签',
