@@ -1,6 +1,6 @@
 import React from 'react';
 import { Select, Input, Checkbox } from 'antd';
-import { IOperationItem } from './interface';
+import { IOperationItem, IOptionItem } from './interface';
 
 const { Option } = Select;
 const { Group: CheckboxGroup } = Checkbox;
@@ -20,9 +20,9 @@ const OperationItem = ({
   } else if (type === 'select') {
     return (
       <Select onChange={selectChange} placeholder={placeholder} getPopupContainer={e => e}>
-        {selectList?.map((item: string, index: number) => (
-          <Option value={item} key={index}>
-            {item}
+        {selectList?.map((item: IOptionItem, index: number) => (
+          <Option value={item.id} key={index}>
+            {item.value}
           </Option>
         ))}
       </Select>

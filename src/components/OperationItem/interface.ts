@@ -11,10 +11,15 @@ export interface IOperationItem {
   ) => void;
   inputChange?: ChangeEventHandler; // 输入框值改变方法
   placeholder?: string;
-  selectList?: Array<string>; // 选择框列表数据
+  selectList?: Array<IOptionItem>; // 选择框列表数据
   checkBoxList?: Array<string>; // 多选框列表数据
   checkBoxValueList?: Array<CheckboxValueType>; // 多选框选中的列表数据
   checkBoxChange?: (checkedValue: Array<CheckboxValueType>) => void; // 多选框值改变方法
+}
+
+export interface IOptionItem {
+  id: string | number;
+  value: string;
 }
 
 type Type = 'select' | 'input' | 'checkBox';
