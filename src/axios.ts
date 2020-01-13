@@ -3,7 +3,7 @@
  * @LastEditors  : Always
  * @email: 740905172@qq.com
  * @Date: 2019-12-31 16:51:57
- * @LastEditTime : 2020-01-09 17:26:10
+ * @LastEditTime : 2020-01-13 16:33:46
  * @FilePath: /managementSystem/src/axios.ts
  */
 /* eslint-disable */
@@ -52,7 +52,8 @@ export default function http<T>({
     axios({
       ...requestParams,
       cancelToken: new CancelToken(c => {
-        window.cancelRequestFn = c;
+        // 把取消请求的token放到window上,每次路由跳转的时候会取消
+        window.cancelRequestFnList.push(c);
       }),
     })
       .then((res: AxiosResponse<IHttpResponseData<T>>) => {

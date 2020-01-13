@@ -1,14 +1,14 @@
 .productsListWrapper {
-  background: #fff;
   border-radius: 20px;
   .operationWrapper {
     box-sizing: border-box;
     padding: 20px;
     display: flex;
-    width: 70%;
+    width: 100%;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
+    background: #fff;
     border-radius: 20px;
     .operationItem {
       width: 40%;
@@ -16,7 +16,7 @@
       align-items: center;
       margin-top: 10px;
       &.operationItemCheckBox {
-          width: 100%;
+        width: 100%;
       }
       .operationItemLabel {
         font-size: 12px;
@@ -39,6 +39,19 @@
       width: 100%;
       display: block;
       margin-top: 10px;
+    }
+  }
+  .productsTableWrapper {
+    box-sizing: border-box;
+    padding: 20px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: #fff;
+    margin-top: 20px;
+    .tableDataTitle {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 }

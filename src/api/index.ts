@@ -3,12 +3,12 @@
  * @LastEditors  : Always
  * @email: 740905172@qq.com
  * @Date: 2019-12-31 17:34:08
- * @LastEditTime : 2020-01-10 16:53:34
+ * @LastEditTime : 2020-01-13 15:17:23
  * @FilePath: /managementSystem/src/api/index.ts
  */
 import http from '@/axios';
 import { IData } from '@/pages/ServerIndex/interface';
-import { IProductListOperations } from '@/pages/ProductsList/interface';
+import { IProductListOperations, ITableData, ITableResponse } from '@/pages/ProductsList/interface';
 
 const BASE_PATH = '/api';
 
@@ -31,3 +31,9 @@ export const getServerIndexData = () =>
  */
 export const getProductOperationsData = () =>
   http<IProductListOperations>({ type: 'get', url: `${BASE_PATH}/productList/operationsData` });
+
+  /**
+   * 获取产品列表页面表格数据
+   */
+export const getProductTableData = () =>
+  http<ITableResponse>({ type: 'post', url: `${BASE_PATH}/productList/tableData` });

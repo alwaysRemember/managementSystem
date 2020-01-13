@@ -209,7 +209,6 @@ const ServerIndex = (props: any) => {
 
   useEffect(() => {
     getData();
-    return () => window.cancelRequestFn && window.cancelRequestFn();
   }, []);
 
   const getData = async () => {
