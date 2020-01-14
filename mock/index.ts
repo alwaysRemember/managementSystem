@@ -3,7 +3,7 @@
  * @LastEditors  : Always
  * @email: 740905172@qq.com
  * @Date: 2019-12-31 17:44:12
- * @LastEditTime : 2020-01-13 18:54:50
+ * @LastEditTime : 2020-01-14 19:10:17
  * @FilePath: /managementSystem/mock/index.ts
  */
 
@@ -88,5 +88,19 @@ export default {
         }),
       );
     });
+  },
+
+  'POST /api/productList/updateTableTag': (req: any, res: any) => {
+    delay(() =>
+      res.json(
+        responseData({
+          isSelect: true,
+        }),
+      ),
+    );
+  },
+
+  'POST /api/productList/updateTableStatus': (req: any, res: any) => {
+    delay(() => res.json(responseData({ status: req.body.rowId % 2 === 0 })));
   },
 };

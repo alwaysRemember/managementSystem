@@ -3,7 +3,7 @@
  * @LastEditors  : Always
  * @email: 740905172@qq.com
  * @Date: 2019-12-31 16:51:57
- * @LastEditTime : 2020-01-13 16:33:46
+ * @LastEditTime : 2020-01-14 18:52:15
  * @FilePath: /managementSystem/src/axios.ts
  */
 /* eslint-disable */
@@ -56,12 +56,15 @@ export default function http<T>({
         window.cancelRequestFnList.push(c);
       }),
     })
-      .then((res: AxiosResponse<IHttpResponseData<T>>) => {
+      .then(async (res: AxiosResponse<IHttpResponseData<T>>) => {
         const { code, message, data } = res.data;
         // 数据过滤
-        codeType(code, message)
-          .then(() => resolve(data))
-          .catch(() => reject(code));
+        try {
+          await codeType(code, message);
+          resolve(data);
+        } catch (e) {
+          reject(code);
+        }
       })
       .catch(() => codeType(-1, 'server connection timed out!'));
   });
