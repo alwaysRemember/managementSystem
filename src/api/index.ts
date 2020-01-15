@@ -3,7 +3,7 @@
  * @LastEditors  : Always
  * @email: 740905172@qq.com
  * @Date: 2019-12-31 17:34:08
- * @LastEditTime : 2020-01-14 19:04:29
+ * @LastEditTime : 2020-01-15 17:04:26
  * @FilePath: /managementSystem/src/api/index.ts
  */
 import http from '@/axios';
@@ -64,3 +64,10 @@ export const updateProductTableDataStatus = (params: {
     url: `${BASE_PATH}/productList/updateTableStatus`,
     params,
   });
+
+/**
+ * 删除产品列表表格数据
+ * @param params
+ */
+export const deleteProductTableData = (params: { rowIdList: Array<string | number> }) =>
+  http({ type: 'post', url: `${BASE_PATH}/productList/deleteTableData`, params });

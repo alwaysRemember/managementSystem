@@ -13,10 +13,12 @@ import {
   getProductTableData,
   updateProductTableDataTag,
   updateProductTableDataStatus,
+  deleteProductTableData,
 } from '../../api';
 import { setClassName, amountConver } from '@/utils';
 import styles from './index.less';
 import { ColumnProps } from 'antd/lib/table';
+import { IOperationListData } from '@/components/Table/interface';
 
 const ProductsList = (props: any) => {
   const [productName, setProductName] = useState<string>(''); // 查询的商品名称
@@ -35,15 +37,21 @@ const ProductsList = (props: any) => {
   });
 
   const getOperationsData = async () => {
-    const data = await getProductOperationsData();
-    setOperationsData(data);
+    try {
+      const data = await getProductOperationsData();
+      setOperationsData(data);
+    } catch ({ code }) {}
   };
 
   const getTableData = async () => {
     setTableDataLoading(true);
-    const { list, page } = await getProductTableData();
-    setTableData(list);
-    setTableDataLoading(false);
+    try {
+      const { list, page } = await getProductTableData();
+      setTableData(list);
+    } catch ({ code }) {
+    } finally {
+      setTableDataLoading(false);
+    }
   };
 
   /**
@@ -86,8 +94,7 @@ const ProductsList = (props: any) => {
         },
       );
       setTableData(data);
-    } catch (code) {
-      window.message.error('改变标签出错');
+    } catch ({ code }) {
     } finally {
       setTableDataLoading(false);
     }
@@ -107,8 +114,51 @@ const ProductsList = (props: any) => {
         }),
       );
       setTableData(data);
-    } catch (code) {
-      window.message.error('改变状态出错');
+    } catch ({ code }) {
+    } finally {
+      setTableDataLoading(false);
+    }
+  };
+
+  /**
+   * 表格删除按钮
+   * @param rotData
+   */
+  const tableDeleteData = (rowData: ITableData) => _deleteSelect([rowData]);
+
+  /**
+   * 表格编辑按钮
+   * @param rowData
+   */
+  const tableEditData = (rowData: ITableData) => {
+  };
+
+  /**
+   * 表格删除所选数据按钮
+   * @param selectRows
+   */
+  const tableDeleteSelectData = async (selectRows: Array<ITableData>) => _deleteSelect(selectRows);
+
+  /**
+   * 请求后端删除表格数据
+   * @param selectRows
+   */
+  const _deleteSelect = async (selectRows: Array<ITableData>) => {
+    // 获取选择的数据id
+    const rowIdList: Array<number | string> = selectRows.map((item: ITableData) => item.id);
+    setTableDataLoading(true);
+    try {
+      await deleteProductTableData({ rowIdList });
+      window.message.success({
+        content: '删除成功',
+        duration: 1,
+      });
+
+      const timer = setTimeout(() => {
+        getTableData();
+        clearTimeout(timer);
+      }, 1000);
+    } catch ({ code }) {
     } finally {
       setTableDataLoading(false);
     }
@@ -139,6 +189,18 @@ const ProductsList = (props: any) => {
     },
   ];
 
+  // 表格头部操作栏
+  const tableTopOperation: Array<IOperationListData> = [
+    {
+      name: '添加产品',
+      type: 'primary',
+      disabled: true,
+      func: () => {
+      },
+      size: 'default',
+    },
+  ];
+
   // 表格渲染数据
   const columns: Array<ColumnProps<ITableData>> = [
     {
@@ -147,6 +209,7 @@ const ProductsList = (props: any) => {
       key: 'id',
       align: 'center',
       width: 100,
+      render: (text: string) => <span>{text}</span>,
     },
     {
       title: 'logo',
@@ -270,7 +333,11 @@ const ProductsList = (props: any) => {
           columns={columns}
           dataSource={tableData}
           loading={tableDataLoading}
-          scroll={{ y: 540 }}
+          onDeleteDataCb={tableDeleteData}
+          onEditDataCb={tableEditData}
+          onDeleteSelectDataCb={tableDeleteSelectData}
+          tableTopOperationList={tableTopOperation}
+          scroll={{ x: 1300 }}
         />
       </div>
     </div>

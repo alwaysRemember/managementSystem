@@ -3,7 +3,7 @@
  * @LastEditors  : Always
  * @email: 740905172@qq.com
  * @Date: 2019-12-30 17:01:58
- * @LastEditTime : 2020-01-13 16:38:20
+ * @LastEditTime : 2020-01-15 19:08:08
  * @FilePath: /weChatSalesSystem/src/app.ts
  */
 import React from 'react';
@@ -32,7 +32,7 @@ export function onRouteChange() {
   // 每次路由切换的时候都取消掉上个页面的请求
   if (window.cancelRequestFnList.length) {
     window.cancelRequestFnList.forEach(fn => {
-      fn();
+      fn("cancel");
     });
     window.cancelRequestFnList = [];
   }

@@ -3,7 +3,7 @@
  * @LastEditors  : Always
  * @email: 740905172@qq.com
  * @Date: 2019-12-31 16:51:57
- * @LastEditTime : 2020-01-14 18:52:15
+ * @LastEditTime : 2020-01-15 19:25:38
  * @FilePath: /managementSystem/src/axios.ts
  */
 /* eslint-disable */
@@ -11,6 +11,7 @@ import axios, { AxiosResponse, CancelTokenStatic } from 'axios';
 import Qs from 'qs';
 import { IHttp, IHttpResponseData } from './interface/Http';
 import { codeType } from './codeType';
+import { HttpResponseCodeEnums } from './enums/HttpResponseCodeEnums';
 
 // 设置全局axios默认值
 axios.defaults.timeout = 30000; // 20000的超时验证
@@ -63,9 +64,18 @@ export default function http<T>({
           await codeType(code, message);
           resolve(data);
         } catch (e) {
-          reject(code);
+          reject({ code, message });
         }
       })
-      .catch(() => codeType(-1, 'server connection timed out!'));
+      .catch(async e => {
+        try {
+          // 过滤掉主动终结的请求
+          if (e.message !== 'cancel') {
+            await codeType(-1, 'server connection timed out!');
+          }
+        } catch (e) {
+          reject({ code: HttpResponseCodeEnums.TIME_OUT });
+        }
+      });
   });
 }
