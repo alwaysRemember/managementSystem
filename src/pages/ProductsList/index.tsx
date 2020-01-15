@@ -43,15 +43,21 @@ const ProductsList = (props: any) => {
     } catch ({ code }) {}
   };
 
-  const getTableData = async () => {
-    setTableDataLoading(true);
-    try {
-      const { list, page } = await getProductTableData();
-      setTableData(list);
-    } catch ({ code }) {
-    } finally {
-      setTableDataLoading(false);
-    }
+  /**
+   * 获取表格数据
+   */
+  const getTableData = () => {
+    return new Promise(async res => {
+      setTableDataLoading(true);
+      try {
+        const { list, page } = await getProductTableData();
+        setTableData(list);
+        res();
+      } catch ({ code }) {
+      } finally {
+        setTableDataLoading(false);
+      }
+    });
   };
 
   /**
@@ -130,8 +136,7 @@ const ProductsList = (props: any) => {
    * 表格编辑按钮
    * @param rowData
    */
-  const tableEditData = (rowData: ITableData) => {
-  };
+  const tableEditData = (rowData: ITableData) => {};
 
   /**
    * 表格删除所选数据按钮
@@ -149,15 +154,17 @@ const ProductsList = (props: any) => {
     setTableDataLoading(true);
     try {
       await deleteProductTableData({ rowIdList });
-      window.message.success({
-        content: '删除成功',
-        duration: 1,
-      });
 
+      // 删除成功后再次获取一次数据 此处使用定时器是为了在finally后执行数据,避免重新请求数据的loading不显示
       const timer = setTimeout(() => {
-        getTableData();
-        clearTimeout(timer);
-      }, 1000);
+        getTableData().then(() => {
+          window.message.success({
+            content: '删除成功',
+            duration: 1,
+          });
+          clearTimeout(timer);
+        });
+      }, 0);
     } catch ({ code }) {
     } finally {
       setTableDataLoading(false);
@@ -195,8 +202,7 @@ const ProductsList = (props: any) => {
       name: '添加产品',
       type: 'primary',
       disabled: true,
-      func: () => {
-      },
+      func: () => {},
       size: 'default',
     },
   ];
