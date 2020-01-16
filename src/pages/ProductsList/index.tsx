@@ -19,6 +19,7 @@ import { setClassName, amountConver } from '@/utils';
 import styles from './index.less';
 import { ColumnProps } from 'antd/lib/table';
 import { IOperationListData } from '@/components/Table/interface';
+import ImgLazyLoad from '@/components/ImgLazyLoad';
 
 const ProductsList = (props: any) => {
   const [productName, setProductName] = useState<string>(''); // 查询的商品名称
@@ -221,7 +222,7 @@ const ProductsList = (props: any) => {
       title: 'logo',
       dataIndex: 'logo',
       key: 'logo',
-      render: (logo: string) => <img src={logo} alt="" width="40" height="40" />,
+      render: (logo: string) => <ImgLazyLoad width={40} height={40} imgSrc={logo} loadingSize={40} />,
       align: 'center',
       width: 100,
     },
