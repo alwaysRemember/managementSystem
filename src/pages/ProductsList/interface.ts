@@ -3,19 +3,19 @@
  * @LastEditors  : Always
  * @email: 740905172@qq.com
  * @Date: 2020-01-10 15:56:17
- * @LastEditTime : 2020-01-13 16:46:52
+ * @LastEditTime : 2020-01-16 16:31:49
  * @FilePath: /managementSystem/src/pages/ProductsList/interface.ts
  */
-import { IOptionItem } from '@/components/OperationItem/interface';
+import { ISearchSelectItem } from '@/components/SearchItem/interface';
 import { ProductStatusEnums } from '@/enums/ProductStatusEnums';
 
-export interface IProductListOperations {
-  selectList: Array<IOptionItem>;
-  checkList: Array<IOptionItem>;
+export interface IProductListSearch {
+  selectList: Array<ISearchSelectItem>;
+  checkList: Array<ISearchSelectItem>;
 }
 
 export interface ITableResponse {
-  page: number;
+  totalPage: number;
   list: Array<ITableData>;
 }
 

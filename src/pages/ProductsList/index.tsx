@@ -1,46 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Switch } from 'antd';
-import OperationItem from '@/components/OperationItem';
-import TSpin from '../../components/TSpin';
 import Table from '../../components/Table';
+import SearchCom from '../../components/SearchCom';
 
-import { IProductListOperations, ITableData, ITableDataTagList } from './interface';
-import { IOperationItem, IOptionItem } from '@/components/OperationItem/interface';
+import { IProductListSearch, ITableData, ITableDataTagList } from './interface';
+import { ISearchItem, ISearchSelectItem } from '@/components/SearchItem/interface';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 
 import {
-  getProductOperationsData,
+  getProductSearchData,
   getProductTableData,
   updateProductTableDataTag,
   updateProductTableDataStatus,
   deleteProductTableData,
 } from '../../api';
-import { setClassName, amountConver } from '@/utils';
+import { amountConver } from '@/utils';
 import styles from './index.less';
 import { ColumnProps } from 'antd/lib/table';
 import { IOperationListData } from '@/components/Table/interface';
 import ImgLazyLoad from '@/components/ImgLazyLoad';
+import { ISearchComButton } from '@/components/SearchCom/interface';
 
 const ProductsList = (props: any) => {
   const [productName, setProductName] = useState<string>(''); // 查询的商品名称
-  const [selectVal, setSelectVal] = useState(''); // 选择的商品分类id
+  const [selectId, setSelectId] = useState<string>(''); // 选择的商品分类id
   const [checkBoxList, setCheckBoxList] = useState<Array<CheckboxValueType>>([]); // 选中的商品标签最后提交的时候需要转为id传递
+  const [totalPage, setTotalPage] = useState<number>(1); // 表格总页数
+  const [currentPage, setCurrentPage] = useState<number>(1); // 当前页数
 
   const [btnLoading, setBtnLoading] = useState<boolean>(false); // 按钮loading状态
-  const [tableDataLoading, setTableDataLoading] = useState<boolean>(true); // 表格加载状态
+  const [tableDataLoading, setTableDataLoading] = useState<boolean>(false); // 表格加载状态
 
   const [tableData, setTableData] = useState<Array<ITableData>>([]);
 
   // 操作栏数据
-  const [operationsData, setOperationsData] = useState<IProductListOperations>({
+  const [searchData, setSearchData] = useState<IProductListSearch>({
     checkList: [],
     selectList: [],
   });
 
-  const getOperationsData = async () => {
+  /**
+   * 获取操作栏选择的数据
+   */
+  const getSearchData = async () => {
     try {
-      const data = await getProductOperationsData();
-      setOperationsData(data);
+      const data = await getProductSearchData();
+      setSearchData(data);
     } catch ({ code }) {}
   };
 
@@ -49,10 +54,32 @@ const ProductsList = (props: any) => {
    */
   const getTableData = () => {
     return new Promise(async res => {
+      // 防止多次点击加载数据
+      if (tableDataLoading) {
+        window.message.warn('正在获取数据，请稍等~');
+        return;
+      }
       setTableDataLoading(true);
+      // 根据选中的标签获取对应的id
+      const checkList: Array<string> = checkBoxList.map((value: CheckboxValueType) => {
+        // 根据选中的标签遍历标签列表数据
+        const val = searchData.checkList.find((data: ISearchSelectItem) => data.value === value);
+        return val?.id as string;
+      });
+
       try {
-        const { list, page } = await getProductTableData();
-        setTableData(list);
+        // 请求数据
+        const { list, totalPage } = await getProductTableData({
+          page: currentPage,
+          productName,
+          checkList,
+          selectId,
+        });
+        setTableData(list); // 设置表格数据
+        setTotalPage(totalPage); // 设置总页数
+
+        // 搜索成功后删除搜索数据
+        _resetSearchVal();
         res();
       } catch ({ code }) {
       } finally {
@@ -65,14 +92,12 @@ const ProductsList = (props: any) => {
    * 搜索按钮
    */
   const searchBtn = (): void => {
-    // 根据选中的标签获取对应的id
-    const checkList: Array<number | string | undefined> = checkBoxList.map(
-      (value: CheckboxValueType) => {
-        // 根据选中的标签遍历标签列表数据
-        const val = operationsData.checkList.find((data: IOptionItem) => data.value === value);
-        return val?.id;
-      },
-    );
+    // 校验当三个搜索条件都未输入的情况
+    if (selectId === '' && !checkBoxList.length && !productName) {
+      window.message.error('请选择要查询的条件');
+      return;
+    }
+    getTableData();
   };
 
   /**
@@ -172,13 +197,21 @@ const ProductsList = (props: any) => {
     }
   };
 
-  // 操作框
-  const operationsList: Array<IOperationItem> = [
+  // 重置搜索栏数据
+  const _resetSearchVal = () => {
+    setProductName('');
+    setCheckBoxList([]);
+    setSelectId('');
+  };
+
+  // 搜索组件数据
+  const searchComList: Array<ISearchItem> = [
     {
       label: '商品分类',
       type: 'select',
-      selectChange: id => setSelectVal(id),
-      selectList: operationsData.selectList,
+      value: selectId,
+      selectChange: id => setSelectId(id),
+      selectList: searchData.selectList,
       placeholder: '请选择分类',
     },
     {
@@ -191,9 +224,20 @@ const ProductsList = (props: any) => {
     {
       label: '商品标签',
       type: 'checkBox',
-      checkBoxList: (() => operationsData.checkList.map((item: IOptionItem) => item.value))(),
+      checkBoxList: (() => searchData.checkList.map((item: ISearchSelectItem) => item.value))(),
       checkBoxChange: (list: Array<CheckboxValueType>) => setCheckBoxList(list),
       checkBoxValueList: checkBoxList,
+    },
+  ];
+
+  // 搜索组件中按钮
+  const searchComButtonList: Array<ISearchComButton> = [
+    {
+      icon: 'search',
+      children: '搜索',
+      type: 'primary',
+      loading: btnLoading,
+      onClick: searchBtn,
     },
   ];
 
@@ -222,7 +266,9 @@ const ProductsList = (props: any) => {
       title: 'logo',
       dataIndex: 'logo',
       key: 'logo',
-      render: (logo: string) => <ImgLazyLoad width={40} height={40} imgSrc={logo} loadingSize={40} />,
+      render: (logo: string) => (
+        <ImgLazyLoad width={40} height={40} imgSrc={logo} loadingSize={40} />
+      ),
       align: 'center',
       width: 100,
     },
@@ -299,42 +345,22 @@ const ProductsList = (props: any) => {
   ];
 
   useEffect(() => {
-    getOperationsData();
+    getSearchData();
     getTableData();
     return () => {};
   }, []);
 
   return (
     <div className={styles.productsListWrapper}>
-      {/* 操作栏 */}
-      <div className={styles.operationWrapper}>
-        <TSpin isLoading={!Boolean(operationsData.checkList.length)} rows={3}>
-          <div className={styles.operationContainer}>
-            {/* 遍历操作框项 */}
-            {operationsList.map((item: IOperationItem, index: number) => (
-              <div
-                className={setClassName([
-                  styles.operationItem,
-                  item.type === 'checkBox' ? styles.operationItemCheckBox : '',
-                ])}
-                key={index}
-              >
-                <span className={styles.operationItemLabel}>{item.label}</span>
-                <div className={styles.operationItemVal}>
-                  <OperationItem {...item} />
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className={styles.operationSearchBtn}>
-            <Button icon="search" type="primary" loading={btnLoading} onClick={searchBtn}>
-              搜索
-            </Button>
-          </div>
-        </TSpin>
-      </div>
+      {/* 搜索组件 */}
+      <SearchCom
+        searchList={searchComList}
+        isLoading={!Boolean(searchData.checkList.length)}
+        rows={4}
+        searchButtonList={searchComButtonList}
+      />
 
-      {/* 表格数据 */}
+      {/* 表格组件 */}
       <div className={styles.productsTableWrapper}>
         <Table
           columns={columns}

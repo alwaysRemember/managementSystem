@@ -42,12 +42,12 @@ export default {
   'GET /api/productList/operationsData': (req: any, res: any) => {
     delay(() => {
       const checkList = [...Array(8).keys()].map(item => ({
-        id: item,
-        value: `${String.fromCharCode(65 + Math.ceil(Math.random() * 25))}_check_${item}`,
+        id: item + 1,
+        value: `${String.fromCharCode(65 + Math.ceil(Math.random() * 25))}_check_${item + 1}`,
       }));
       const selectList = [...Array(8).keys()].map(item => ({
-        id: item,
-        value: `${String.fromCharCode(65 + Math.ceil(Math.random() * 25))}_select_${item}`,
+        id: item + 1,
+        value: `${String.fromCharCode(65 + Math.ceil(Math.random() * 25))}_select_${item + 1}`,
       }));
       res.json(
         responseData({

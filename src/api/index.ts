@@ -3,12 +3,12 @@
  * @LastEditors  : Always
  * @email: 740905172@qq.com
  * @Date: 2019-12-31 17:34:08
- * @LastEditTime : 2020-01-15 17:04:26
+ * @LastEditTime : 2020-01-16 16:32:04
  * @FilePath: /managementSystem/src/api/index.ts
  */
 import http from '@/axios';
 import { IData } from '@/pages/ServerIndex/interface';
-import { IProductListOperations, ITableData, ITableResponse } from '@/pages/ProductsList/interface';
+import { IProductListSearch, ITableResponse } from '@/pages/ProductsList/interface';
 
 const BASE_PATH = '/api';
 
@@ -29,14 +29,24 @@ export const getServerIndexData = () =>
 /**
  * 获取产品列表页面操作栏数据
  */
-export const getProductOperationsData = () =>
-  http<IProductListOperations>({ type: 'get', url: `${BASE_PATH}/productList/operationsData` });
+export const getProductSearchData = () =>
+  http<IProductListSearch>({ type: 'get', url: `${BASE_PATH}/productList/operationsData` });
 
 /**
  * 获取产品列表页面表格数据
  */
-export const getProductTableData = () =>
-  http<ITableResponse>({ type: 'post', url: `${BASE_PATH}/productList/tableData` });
+export const getProductTableData = (params: {
+  page: number;
+  productName?: string;
+  selectId?: string;
+  checkList?: Array<string>;
+}) =>
+  http<ITableResponse>({
+    type: 'post',
+    url: `${BASE_PATH}/productList/tableData`,
+    params,
+    contentType: 'json',
+  });
 
 /**
  * 更新产品列表row的标签
@@ -71,3 +81,13 @@ export const updateProductTableDataStatus = (params: {
  */
 export const deleteProductTableData = (params: { rowIdList: Array<string | number> }) =>
   http({ type: 'post', url: `${BASE_PATH}/productList/deleteTableData`, params });
+
+/**
+ * 查询产品列表
+ * @param params
+ */
+export const searchProductTableData = (params: {
+  selectId: String;
+  checkList: Array<string>;
+  productName: string;
+}) => http({ type: 'post', url: `${BASE_PATH}/productList/search`, params, contentType: 'json' });

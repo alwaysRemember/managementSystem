@@ -1,0 +1,42 @@
+.searchWrapper {
+  box-sizing: border-box;
+  padding: 20px;
+  background: #fff;
+  border-radius: 20px;
+  .searchContainer {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .searchItem {
+    width: 350px;
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    margin-right: 20px;
+    &.searchItemCheckBox {
+      width: 100%;
+    }
+    .searchItemLabel {
+      font-size: 12px;
+      color: #333;
+      margin-right: 20px;
+    }
+    .searchItemVal {
+      flex: 1;
+      :global {
+        .ant-select-dropdown {
+          top: 32px !important;
+        }
+        .ant-select {
+          width: 100%;
+        }
+      }
+    }
+  }
+  .searchSearchBtn {
+    width: 100%;
+    display: block;
+    margin-top: 10px;
+  }
+}
