@@ -2,10 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Button, Switch } from 'antd';
 import Table from '../../components/Table';
 import SearchCom from '../../components/SearchCom';
+import ImgLazyLoad from '@/components/ImgLazyLoad';
 
 import { IProductListSearch, ITableData, ITableDataTagList } from './interface';
 import { ISearchItem, ISearchSelectItem } from '@/components/SearchItem/interface';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
+import { IOperationListData } from '@/components/Table/interface';
+import { ISearchComButton } from '@/components/SearchCom/interface';
+import { ColumnProps } from 'antd/lib/table';
 
 import {
   getProductSearchData,
@@ -14,21 +18,18 @@ import {
   updateProductTableDataStatus,
   deleteProductTableData,
 } from '../../api';
+
 import { amountConver } from '@/utils';
 import styles from './index.less';
-import { ColumnProps } from 'antd/lib/table';
-import { IOperationListData } from '@/components/Table/interface';
-import ImgLazyLoad from '@/components/ImgLazyLoad';
-import { ISearchComButton } from '@/components/SearchCom/interface';
 
-const ProductsList = (props: any) => {
+const ProductsList = () => {
   const [productName, setProductName] = useState<string>(''); // 查询的商品名称
   const [selectId, setSelectId] = useState<string>(''); // 选择的商品分类id
   const [checkBoxList, setCheckBoxList] = useState<Array<CheckboxValueType>>([]); // 选中的商品标签最后提交的时候需要转为id传递
+  const [searchBtnLoading, setSearchBtnLoading] = useState<boolean>(false); // 按钮loading状态
+
   const [totalPage, setTotalPage] = useState<number>(1); // 表格总页数
   const [currentPage, setCurrentPage] = useState<number>(1); // 当前页数
-
-  const [btnLoading, setBtnLoading] = useState<boolean>(false); // 按钮loading状态
   const [tableDataLoading, setTableDataLoading] = useState<boolean>(false); // 表格加载状态
 
   const [tableData, setTableData] = useState<Array<ITableData>>([]);
@@ -51,14 +52,16 @@ const ProductsList = (props: any) => {
 
   /**
    * 获取表格数据
+   * @parma {boolean} isInitData  是否为初始参数请求数据
    */
-  const getTableData = () => {
+  const getTableData = (isInitData: boolean = false) => {
     return new Promise(async res => {
       // 防止多次点击加载数据
       if (tableDataLoading) {
         window.message.warn('正在获取数据，请稍等~');
         return;
       }
+
       setTableDataLoading(true);
       // 根据选中的标签获取对应的id
       const checkList: Array<string> = checkBoxList.map((value: CheckboxValueType) => {
@@ -68,18 +71,18 @@ const ProductsList = (props: any) => {
       });
 
       try {
+        // 定义请求数据对象
+        const params = {
+          page: isInitData ? 1 : currentPage,
+          selectId: isInitData ? '' : selectId,
+          checkList: isInitData ? [] : checkList,
+          productName: isInitData ? '' : productName,
+        };
+
         // 请求数据
-        const { list, totalPage } = await getProductTableData({
-          page: currentPage,
-          productName,
-          checkList,
-          selectId,
-        });
+        const { list, totalPage } = await getProductTableData(params);
         setTableData(list); // 设置表格数据
         setTotalPage(totalPage); // 设置总页数
-
-        // 搜索成功后删除搜索数据
-        _resetSearchVal();
         res();
       } catch ({ code }) {
       } finally {
@@ -91,13 +94,18 @@ const ProductsList = (props: any) => {
   /**
    * 搜索按钮
    */
-  const searchBtn = (): void => {
+  const searchBtn = async () => {
     // 校验当三个搜索条件都未输入的情况
     if (selectId === '' && !checkBoxList.length && !productName) {
       window.message.error('请选择要查询的条件');
       return;
     }
-    getTableData();
+    setSearchBtnLoading(true);
+    try {
+      await getTableData();
+    } finally {
+      setSearchBtnLoading(false);
+    }
   };
 
   /**
@@ -236,8 +244,17 @@ const ProductsList = (props: any) => {
       icon: 'search',
       children: '搜索',
       type: 'primary',
-      loading: btnLoading,
+      loading: searchBtnLoading,
       onClick: searchBtn,
+    },
+    {
+      icon: 'delete',
+      children: '清除搜索数据',
+      type: 'danger',
+      onClick: () => {
+        _resetSearchVal();
+        getTableData(true);
+      },
     },
   ];
 
