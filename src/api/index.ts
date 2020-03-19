@@ -1,9 +1,9 @@
 /*
  * @Author: Always
- * @LastEditors  : Always
+ * @LastEditors: Always
  * @email: 740905172@qq.com
  * @Date: 2019-12-31 17:34:08
- * @LastEditTime : 2020-01-16 16:32:04
+ * @LastEditTime: 2020-03-19 18:31:36
  * @FilePath: /managementSystem/src/api/index.ts
  */
 import http from '@/axios';
@@ -18,19 +18,19 @@ const BASE_PATH = '/api';
  * @param (params)  params.password
  */
 export const login = (params: { userName: string; password: string }) =>
-  http({ type: 'post', url: `${BASE_PATH}/login`, params });
+http.request({ method: 'post', url: `${BASE_PATH}/login`, params });
 
 /**
  * 获取首页数据
  */
 export const getServerIndexData = () =>
-  http<IData>({ type: 'get', url: `${BASE_PATH}/serverIndex` });
+  http.request<IData>({ method: 'get', url: '/serverIndex' });
 
 /**
  * 获取产品列表页面操作栏数据
  */
 export const getProductSearchData = () =>
-  http<IProductListSearch>({ type: 'get', url: `${BASE_PATH}/productList/operationsData` });
+http.request<IProductListSearch>({ method: 'get', url: `/productList/operationsData` });
 
 /**
  * 获取产品列表页面表格数据
@@ -41,9 +41,9 @@ export const getProductTableData = (params: {
   selectId?: string;
   checkList?: Array<string>;
 }) =>
-  http<ITableResponse>({
-    type: 'post',
-    url: `${BASE_PATH}/productList/tableData`,
+http.request<ITableResponse>({
+  method: 'post',
+    url: `/productList/tableData`,
     params,
     contentType: 'json',
   });
@@ -56,9 +56,9 @@ export const updateProductTableDataTag = (params: {
   rowId: number | string; // 产品id
   tagId: number | string; // 产品中的标签id
 }) =>
-  http<{ isSelect: boolean }>({
-    type: 'post',
-    url: `${BASE_PATH}/productList/updateTableTag`,
+http.request<{ isSelect: boolean }>({
+  method: 'post',
+    url: `/productList/updateTableTag`,
     params,
   });
 
@@ -69,9 +69,9 @@ export const updateProductTableDataTag = (params: {
 export const updateProductTableDataStatus = (params: {
   rowId: string | number; //
 }) =>
-  http<{ status: number }>({
-    type: 'post',
-    url: `${BASE_PATH}/productList/updateTableStatus`,
+http.request<{ status: number }>({
+  method: 'post',
+    url: `/productList/updateTableStatus`,
     params,
   });
 
@@ -80,7 +80,7 @@ export const updateProductTableDataStatus = (params: {
  * @param params
  */
 export const deleteProductTableData = (params: { rowIdList: Array<string | number> }) =>
-  http({ type: 'post', url: `${BASE_PATH}/productList/deleteTableData`, params });
+http.request({ method: 'post', url: `/productList/deleteTableData`, params });
 
 /**
  * 查询产品列表
@@ -90,4 +90,4 @@ export const searchProductTableData = (params: {
   selectId: String;
   checkList: Array<string>;
   productName: string;
-}) => http({ type: 'post', url: `${BASE_PATH}/productList/search`, params, contentType: 'json' });
+}) => http.request({ method: 'post', url: `/productList/search`, params, contentType: 'json' });
