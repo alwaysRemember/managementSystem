@@ -34,7 +34,8 @@ const SlideMenu = (props: any) => {
    * 菜单点击
    * @param param0
    */
-  const menuItemClick = ({ key }: { key: string; item: any }) => {
+  const menuItemClick = ({ key }: { key: string }) => {
+    if (selectedKeys[0] === key) return;
     setSelectedKeys([key]);
     router.push(key);
   };

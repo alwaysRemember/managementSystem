@@ -5,7 +5,7 @@ import { IRouter } from '@/interface/Router';
  * @LastEditors: Always
  * @email: 740905172@qq.com
  * @Date: 2020-01-06 17:00:20
- * @LastEditTime: 2020-03-31 18:10:00
+ * @LastEditTime: 2020-03-31 18:48:04
  * @FilePath: /managementSystem/src/router/index.ts
  */
 
@@ -21,6 +21,10 @@ const routerList: Array<IRouter> = [
       {
         title: '产品列表',
         path: '/server/product/productsList',
+      },
+      {
+        title: '添加产品',
+        path: '/server/product/addProduct',
       },
     ],
   },

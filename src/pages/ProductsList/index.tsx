@@ -265,7 +265,7 @@ const ProductsList = () => {
       name: '添加产品',
       type: 'primary',
       disabled: true,
-      func: () => router.push('/server/addProduct'),
+      func: () => router.push('/server/product/addProduct'),
       size: 'default',
     },
   ];
