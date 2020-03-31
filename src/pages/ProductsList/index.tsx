@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Switch } from 'antd';
+import router from 'umi/router';
 import Table from '../../components/Table';
 import SearchCom from '../../components/SearchCom';
 import ImgLazyLoad from '@/components/ImgLazyLoad';
@@ -264,7 +265,7 @@ const ProductsList = () => {
       name: '添加产品',
       type: 'primary',
       disabled: true,
-      func: () => {},
+      func: () => router.push('/server/addProduct'),
       size: 'default',
     },
   ];

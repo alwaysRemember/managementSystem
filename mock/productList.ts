@@ -1,4 +1,39 @@
+/*
+ * @Author: Always
+ * @LastEditors: Always
+ * @Date: 2020-01-15 16:44:10
+ * @LastEditTime: 2020-03-31 17:18:43
+ * @FilePath: /managementSystem/mock/productList.ts
+ */
 import { delay, responseData } from './index';
+
+const tagList = [
+  {
+    id: 11,
+    value: `推荐`,
+    isSelect: false,
+  },
+  {
+    id: 12,
+    value: `新品`,
+    isSelect: false,
+  },
+  {
+    id: 13,
+    value: `热卖`,
+    isSelect: false,
+  },
+  {
+    id: 14,
+    value: `促销`,
+    isSelect: false,
+  },
+  {
+    id: 15,
+    value: `包邮`,
+    isSelect: false,
+  },
+];
 
 let list = [...Array(10).keys()].map(item => ({
   id: item,
@@ -8,33 +43,7 @@ let list = [...Array(10).keys()].map(item => ({
   originalPrice: 10000,
   inStock: item * 2,
   status: item % 2 === 0 ? 0 : 1,
-  tagList: [
-    {
-      id: 11,
-      value: `推荐`,
-      isSelect: true,
-    },
-    {
-      id: 12,
-      value: `新品`,
-      isSelect: false,
-    },
-    {
-      id: 13,
-      value: `热卖`,
-      isSelect: false,
-    },
-    {
-      id: 14,
-      value: `促销`,
-      isSelect: true,
-    },
-    {
-      id: 15,
-      value: `包邮`,
-      isSelect: false,
-    },
-  ],
+  tagList,
 }));
 
 export default {
@@ -96,5 +105,9 @@ export default {
       }
     });
     delay(() => res.json(responseData({})));
+  },
+
+  'GET /api/productList/tagList': (req: any, res: any) => {
+    delay(() => res.json(responseData(tagList)));
   },
 };

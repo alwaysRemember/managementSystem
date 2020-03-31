@@ -19,7 +19,7 @@ const HeaderCom = ({ badgeCount }: HeaderComInterFace) => {
         </Badge>
         <div className={styles.userExplain}>
           <Icon type="smile" theme="filled" />
-          <p className={styles.userName}>15901749275</p>
+          <p className={styles.userName}>159****9275</p>
           <Icon type="caret-down" theme="filled" />
         </div>
         <div className={styles.userInfoWrapper}>
@@ -32,7 +32,7 @@ const HeaderCom = ({ badgeCount }: HeaderComInterFace) => {
                 </li>
                 <li>
                   <span className={styles.label}>手机号: </span>
-                  <span className={styles.value}>15901749275</span>
+                  <span className={styles.value}>159****9275</span>
                 </li>
               </ul>
             </div>

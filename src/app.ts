@@ -1,10 +1,10 @@
 /*
  * @Author: Always
- * @LastEditors  : Always
+ * @LastEditors: Always
  * @email: 740905172@qq.com
  * @Date: 2019-12-30 17:01:58
- * @LastEditTime : 2020-01-15 19:08:08
- * @FilePath: /weChatSalesSystem/src/app.ts
+ * @LastEditTime: 2020-03-23 14:08:02
+ * @FilePath: /managementSystem/src/app.ts
  */
 import React from 'react';
 import { StoreContext } from 'redux-react-hook';
