@@ -14,13 +14,30 @@ const SlideMenu = (props: any) => {
     location: { pathname },
   } = props;
 
-  const [selectedKeys, setSelectedKeys] = useState<Array<string>>([pathname]);
+  const [selectedKeys, setSelectedKeys] = useState<Array<string>>([pathname]); // 当前的菜单项
+  const [openKeys, setOpenKeys] = useState<Array<string>>([]); // 当前打开的菜单组
 
-  const menuItemClick = ({ key }: { key: string }) => {
+  useEffect(() => {
+    const subMenuKey: string | null = pathname.match(/\/server\/(\S+)\//);
+    setOpenKeys(subMenuKey ? [subMenuKey[1]] : []);
+  }, [pathname]);
+
+  /**
+   * 导航菜单切换
+   * @param openKeys
+   */
+  const subMenuChange = (openKeys: Array<string>) => {
+    setOpenKeys(openKeys);
+  };
+
+  /**
+   * 菜单点击
+   * @param param0
+   */
+  const menuItemClick = ({ key }: { key: string; item: any }) => {
     setSelectedKeys([key]);
     router.push(key);
   };
-
 
   /**
    * 菜单项
@@ -45,7 +62,7 @@ const SlideMenu = (props: any) => {
   const SubMenuItem = (data: IRouter) => {
     return (
       <SubMenu
-        key={`${data.title}_${Math.random() * 10}`}
+        key={data.key}
         title={
           <span>
             {data.icon && <Icon type={data.icon} />}
@@ -60,10 +77,12 @@ const SlideMenu = (props: any) => {
 
   return (
     <Menu
+      openKeys={openKeys}
       mode="inline"
       className={styles.slideMenuWrapper}
       onClick={menuItemClick}
       selectedKeys={selectedKeys}
+      onOpenChange={subMenuChange}
     >
       {menuList.map((item: IRouter) => {
         if (item.children) {

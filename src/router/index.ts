@@ -2,10 +2,10 @@ import { IRouter } from '@/interface/Router';
 
 /*
  * @Author: Always
- * @LastEditors  : Always
+ * @LastEditors: Always
  * @email: 740905172@qq.com
  * @Date: 2020-01-06 17:00:20
- * @LastEditTime : 2020-01-09 15:39:11
+ * @LastEditTime: 2020-03-31 18:10:00
  * @FilePath: /managementSystem/src/router/index.ts
  */
 
@@ -16,10 +16,11 @@ const routerList: Array<IRouter> = [
   },
   {
     title: '产品管理',
+    key: 'product',
     children: [
       {
         title: '产品列表',
-        path: '/server/productsList',
+        path: '/server/product/productsList',
       },
     ],
   },
