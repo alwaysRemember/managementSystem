@@ -8,6 +8,7 @@
     "lint:ts": "tslint \"src/**/*.ts\" \"src/**/*.tsx\""
   },
   "dependencies": {
+    "@ant-design/icons": "^4.1.0",
     "antd": "^3.19.5",
     "axios": "^0.19.0",
     "echarts": "^4.6.0",

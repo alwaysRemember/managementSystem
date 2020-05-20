@@ -285,7 +285,7 @@ const ProductsList = () => {
       dataIndex: 'logo',
       key: 'logo',
       render: (logo: string) => (
-        <ImgLazyLoad width={40} height={40} imgSrc={logo} loadingSize={40} />
+        <ImgLazyLoad width="40" height="40" imgSrc={logo} loadingSize={40} />
       ),
       align: 'center',
       width: 100,
